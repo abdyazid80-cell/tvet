@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MY TVET Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Variables ── */
+    :root {
+      --bg: #f0f4f8;
+      --card: #ffffff;
+      --header-bg: #1a3c6e;
+      --accent: #f4a800;
+      --accent2: #1a3c6e;
+      --text: #1c2b3a;
+      --muted: #5a6e82;
+      --border: #dce3eb;
+      --green: #16a34a;
+      --amber: #d97706;
+      --red: #dc2626;
+      --teal: #0891b2;
+      --purple: #7c3aed;
+      --radius: 10px;
+      --shadow: 0 2px 8px rgba(0,0,0,0.07);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      background: var(--header-bg);
+      color: #fff;
+      padding: 20px 32px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      border-bottom: 4px solid var(--accent);
+    }
+    header .logo {
+      width: 42px; height: 42px;
+      background: var(--accent);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 18px; color: var(--header-bg);
+      flex-shrink: 0;
+    }
+    header h1 { font-size: 20px; font-weight: 700; letter-spacing: 0.3px; }
+    header p  { font-size: 12px; color: #a9c0db; margin-top: 1px; }
+
+    /* ── Main grid ── */
+    main {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      padding: 24px 32px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    @media (max-width: 900px) {
+      main { grid-template-columns: 1fr; padding: 16px; }
+    }
+
+    /* ── Section card ── */
+    section {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px 22px 18px;
+      border: 1px solid var(--border);
+    }
+    section h2 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    section h2 .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+    /* ══════════════════════════════════
+       Section 1 — Students Registered
+    ══════════════════════════════════ */
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    .stat-card {
+      border-radius: 8px;
+      padding: 16px 14px 12px;
+      border-top: 4px solid transparent;
+      background: var(--bg);
+      transition: transform 0.15s;
+    }
+    .stat-card:hover { transform: translateY(-2px); }
+    .stat-card.blue   { border-color: var(--accent2); }
+    .stat-card.teal   { border-color: var(--teal); }
+    .stat-card.purple { border-color: var(--purple); }
+    .stat-card.green  { border-color: var(--green); }
+    .stat-value { font-size: 32px; font-weight: 700; line-height: 1; }
+    .stat-label { font-size: 12px; color: var(--muted); margin-top: 4px; }
+    .stat-card.blue   .stat-value { color: var(--accent2); }
+    .stat-card.teal   .stat-value { color: var(--teal); }
+    .stat-card.purple .stat-value { color: var(--purple); }
+    .stat-card.green  .stat-value { color: var(--green); }
+
+    /* ══════════════════════════════════
+       Section 2 — Tasks Remaining
+    ══════════════════════════════════ */
+    .task-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .badge-count {
+      background: var(--accent);
+      color: var(--header-bg);
+      font-weight: 700;
+      font-size: 12px;
+      padding: 2px 9px;
+      border-radius: 12px;
+    }
+    .task-list { max-height: 240px; overflow-y: auto; }
+    .task-list::-webkit-scrollbar { width: 4px; }
+    .task-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    .task-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 10px;
+      border-radius: 6px;
+      font-size: 13px;
+    }
+    .task-row:nth-child(odd) { background: var(--bg); }
+    .task-name  { flex: 1; font-weight: 500; }
+    .task-role  { font-size: 11px; color: var(--muted); white-space: nowrap; }
+    .priority {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+    .priority.High   { background: #fee2e2; color: var(--red); }
+    .priority.Medium { background: #fef3c7; color: var(--amber); }
+    .priority.Low    { background: #dcfce7; color: var(--green); }
+
+    /* ══════════════════════════════════
+       Section 3 — Workshop Status
+    ══════════════════════════════════ */
+    .ws-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .ws-card {
+      background: var(--bg);
+      border-radius: 8px;
+      padding: 12px 14px;
+      border-left: 4px solid transparent;
+    }
+    .ws-card.Confirmed { border-color: var(--green); }
+    .ws-card.Pending   { border-color: var(--amber); }
+    .ws-card.AtRisk    { border-color: var(--red); }
+    .ws-name { font-weight: 600; font-size: 13px; }
+    .ws-meta { font-size: 11px; color: var(--muted); margin-top: 3px; }
+    .ws-status {
+      display: inline-block;
+      margin-top: 7px;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+    .ws-card.Confirmed .ws-status { background: #dcfce7; color: var(--green); }
+    .ws-card.Pending   .ws-status { background: #fef3c7; color: var(--amber); }
+    .ws-card.AtRisk    .ws-status { background: #fee2e2; color: var(--red); }
+
+    /* ══════════════════════════════════
+       Section 4 — Preparation Checklist
+    ══════════════════════════════════ */
+    .checklist-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .progress-wrap {
+      background: var(--border);
+      border-radius: 6px;
+      height: 8px;
+      margin-bottom: 14px;
+      overflow: hidden;
+    }
+    .progress-bar {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 6px;
+      transition: width 0.3s ease;
+    }
+    .checklist-items { display: flex; flex-direction: column; gap: 6px; }
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .checklist-item:hover { background: var(--bg); }
+    .checklist-item input[type="checkbox"] {
+      width: 15px; height: 15px;
+      accent-color: var(--accent2);
+      cursor: pointer;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .checklist-item label {
+      font-size: 13px;
+      cursor: pointer;
+      line-height: 1.5;
+    }
+    .checklist-item.done label {
+      text-decoration: line-through;
+      color: var(--muted);
+    }
+    .progress-counter {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Header ── -->
+<header>
+  <div class="logo">TV</div>
+  <div>
+    <h1>MY TVET Dashboard</h1>
+    <p>Technical &amp; Vocational Education and Training — 2025 Overview</p>
+  </div>
+</header>
+
+<!-- ── Main Grid ── -->
+<main>
+
+  <!-- Section 1: Students Registered -->
+  <section id="students">
+    <h2><span class="dot"></span>Students Registered</h2>
+    <div class="stat-grid">
+      <div class="stat-card blue">
+        <div class="stat-value">348</div>
+        <div class="stat-label">Total Enrolled</div>
+      </div>
+      <div class="stat-card teal">
+        <div class="stat-value">201</div>
+        <div class="stat-label">Male</div>
+      </div>
+      <div class="stat-card purple">
+        <div class="stat-value">147</div>
+        <div class="stat-label">Female</div>
+      </div>
+      <div class="stat-card green">
+        <div class="stat-value">24</div>
+        <div class="stat-label">New This Month</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 2: Tasks Remaining -->
+  <section id="tasks">
+    <div class="task-header">
+      <h2 style="margin-bottom:0"><span class="dot"></span>Tasks Remaining</h2>
+      <span class="badge-count" id="task-count">8</span>
+    </div>
+    <div class="task-list" id="task-list"></div>
+  </section>
+
+  <!-- Section 3: Workshop Status -->
+  <section id="workshops">
+    <h2><span class="dot"></span>Workshop Status</h2>
+    <div class="ws-grid" id="ws-grid"></div>
+  </section>
+
+  <!-- Section 4: Preparation Checklist -->
+  <section id="checklist">
+    <div class="checklist-header">
+      <h2 style="margin-bottom:0"><span class="dot"></span>Preparation Checklist</h2>
+      <span class="progress-counter" id="cl-counter">3 / 10 complete</span>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-bar" id="cl-bar" style="width:30%"></div>
+    </div>
+    <div class="checklist-items" id="cl-items"></div>
+  </section>
+
+</main>
+
+<script>
+  /* ────────────────────────────────────────
+     Tasks Remaining
+  ──────────────────────────────────────── */
+  const tasks = [
+    { task: "Submit quarterly enrolment report",    role: "Admin",       priority: "High"   },
+    { task: "Confirm venue for welding workshop",   role: "Coordinator", priority: "High"   },
+    { task: "Order PPE stock for automotive bay",   role: "Stores",      priority: "Medium" },
+    { task: "Update student attendance registers",  role: "Lecturer",    priority: "Medium" },
+    { task: "Schedule assessor visit — ICT unit",   role: "Coordinator", priority: "Medium" },
+    { task: "Print timetables for Q3",              role: "Admin",       priority: "Low"    },
+    { task: "Repair projector in Room 4",           role: "Facilities",  priority: "Low"    },
+    { task: "Archive completed learner portfolios", role: "Admin",       priority: "Low"    }
+  ];
+
+  const taskList = document.getElementById('task-list');
+  tasks.forEach(t => {
+    const row = document.createElement('div');
+    row.className = 'task-row';
+    row.innerHTML = `
+      <span class="task-name">${t.task}</span>
+      <span class="task-role">${t.role}</span>
+      <span class="priority ${t.priority}">${t.priority}</span>
+    `;
+    taskList.appendChild(row);
+  });
+  document.getElementById('task-count').textContent = tasks.length;
+
+  /* ────────────────────────────────────────
+     Workshop Status
+  ──────────────────────────────────────── */
+  const workshops = [
+    { name: "Welding Fundamentals",    date: "4 Aug 2025",  facilitator: "T. Molefe",   status: "Confirmed" },
+    { name: "Automotive Electrical",   date: "11 Aug 2025", facilitator: "S. Dlamini",  status: "Pending"   },
+    { name: "ICT Essentials",          date: "18 Aug 2025", facilitator: "N. Khumalo",  status: "Confirmed" },
+    { name: "Plumbing Level 2",        date: "25 Aug 2025", facilitator: "P. Sithole",  status: "AtRisk"    },
+    { name: "Bricklaying & Plastering",date: "1 Sep 2025",  facilitator: "M. Zulu",     status: "Pending"   },
+    { name: "Beauty Therapy Intro",    date: "8 Sep 2025",  facilitator: "L. Nkosi",    status: "Confirmed" }
+  ];
+
+  const wsGrid = document.getElementById('ws-grid');
+  workshops.forEach(w => {
+    const card = document.createElement('div');
+    card.className = `ws-card ${w.status}`;
+    const label = w.status === 'AtRisk' ? 'At Risk' : w.status;
+    card.innerHTML = `
+      <div class="ws-name">${w.name}</div>
+      <div class="ws-meta">${w.date} &bull; ${w.facilitator}</div>
+      <span class="ws-status">${label}</span>
+    `;
+    wsGrid.appendChild(card);
+  });
+
+  /* ────────────────────────────────────────
+     Preparation Checklist
+  ──────────────────────────────────────── */
+  const checklistItems = [
+    { text: "SETA registration confirmed for all enrolled students",  done: true  },
+    { text: "Learner agreements signed and filed",                    done: true  },
+    { text: "NQF unit standards distributed to lecturers",            done: true  },
+    { text: "Workplace experience agreements submitted",              done: false },
+    { text: "RPL assessments scheduled",                             done: false },
+    { text: "First-aid kits inspected and restocked",                done: false },
+    { text: "Workshop safety induction delivered",                   done: false },
+    { text: "Timetable approved by HOD",                             done: false },
+    { text: "Stationery and learning materials issued",              done: false },
+    { text: "Student ID cards printed and distributed",              done: false }
+  ];
+
+  const clItems  = document.getElementById('cl-items');
+  const clBar    = document.getElementById('cl-bar');
+  const clCounter = document.getElementById('cl-counter');
+
+  function updateProgress() {
+    const total   = clItems.querySelectorAll('input[type="checkbox"]').length;
+    const checked = clItems.querySelectorAll('input[type="checkbox"]:checked').length;
+    clBar.style.width = (checked / total * 100) + '%';
+    clCounter.textContent = `${checked} / ${total} complete`;
+  }
+
+  checklistItems.forEach((item, i) => {
+    const id  = `cl-${i}`;
+    const div = document.createElement('div');
+    div.className = 'checklist-item' + (item.done ? ' done' : '');
+    div.innerHTML = `
+      <input type="checkbox" id="${id}" ${item.done ? 'checked' : ''}>
+      <label for="${id}">${item.text}</label>
+    `;
+    div.querySelector('input').addEventListener('change', function() {
+      div.classList.toggle('done', this.checked);
+      updateProgress();
+    });
+    clItems.appendChild(div);
+  });
+
+  updateProgress();
+</script>
+
+</body>
+</html>
